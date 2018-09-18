@@ -1,0 +1,10 @@
+name: trinity
+
+channels:
+- defaults
+
+dependencies:
+- python=3.6
+- matplotlib
+- r-base
+- rpy2

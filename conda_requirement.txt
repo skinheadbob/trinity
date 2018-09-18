@@ -1,0 +1,14 @@
+numpy
+pandas
+statsmodels
+scikit-learn
+scipy
+pyspark
+psycopg2
+requests
+pywebhdfs
+cycler
+django
+coolname
+boto3
+apache-airflow[postgres, s3]
