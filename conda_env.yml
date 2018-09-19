@@ -1,6 +1,7 @@
 name: trinity
 
 channels:
+- conda-forge
 - defaults
 
 dependencies:
