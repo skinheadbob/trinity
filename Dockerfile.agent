@@ -1,0 +1,25 @@
+FROM mesosphere/mesos-agent:1.5.0
+USER root
+ENV HOME /root
+
+RUN apt-get update && apt-get install -y bzip2
+
+RUN mkdir -p $HOME/trinity
+WORKDIR $HOME/trinity
+COPY conda_env.yml .
+COPY conda_requirement.txt .
+COPY conda_r_install_packages.r .
+
+# download conda
+RUN ["/bin/bash", "-c", "curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s"]
+RUN chmod 0755 $HOME/miniconda.sh
+RUN ["/bin/bash", "-c", "$HOME/miniconda.sh -b -p $HOME/conda"]
+RUN rm $HOME/miniconda.sh
+ENV PATH "$HOME/conda/bin:$PATH"
+RUN ["/bin/bash", "-c", "conda update conda"]
+
+# install Python env
+RUN ["/bin/bash", "-c", "conda env create -f conda_env.yml --force"]
+ENV AIRFLOW_GPL_UNIDECODE=yes
+RUN ["/bin/bash", "-c", "source activate trinity && pip install --upgrade pip"]
+RUN ["/bin/bash", "-c", "source activate trinity && pip install -r conda_requirement.txt"]
