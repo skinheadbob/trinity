@@ -1,14 +1,14 @@
 FROM mesosphere/mesos-master:1.5.0
+
 USER root
-ENV HOME /root
+ENV HOME /root/trinity
+RUN mkdir -p $HOME
 
-RUN apt-get update && apt-get install -y bzip2
+RUN apt-get update && apt-get install -y bzip2 gcc
 
-RUN mkdir -p $HOME/trinity
-WORKDIR $HOME/trinity
-COPY conda_env.yml .
-COPY conda_requirement.txt .
-COPY conda_r_install_packages.r .
+COPY conda_env.yml $HOME
+COPY conda_requirement.txt $HOME
+COPY conda_r_install_packages.r $HOME
 
 # download conda
 RUN ["/bin/bash", "-c", "curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s"]
@@ -19,7 +19,7 @@ ENV PATH "$HOME/conda/bin:$PATH"
 RUN ["/bin/bash", "-c", "conda update conda"]
 
 # install Python env
-RUN ["/bin/bash", "-c", "conda env create -f conda_env.yml --force"]
-ENV AIRFLOW_GPL_UNIDECODE=yes
+RUN ["/bin/bash", "-c", "conda env create -f $HOME/conda_env.yml --force"]
 RUN ["/bin/bash", "-c", "source activate trinity && pip install --upgrade pip"]
-RUN ["/bin/bash", "-c", "source activate trinity && pip install -r conda_requirement.txt"]
+ENV AIRFLOW_GPL_UNIDECODE=yes
+RUN ["/bin/bash", "-c", "source activate trinity && pip install -r $HOME/conda_requirement.txt"]

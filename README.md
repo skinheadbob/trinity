@@ -1,4 +1,4 @@
-# trinity
+# Trinity
 Trinity is a big data platform skeleton that aims to bridge the gaps among engineer, data scientist and business analyst.
 
 ## Deployment Architecture
@@ -31,7 +31,12 @@ Install R libraries
 Build Docker image trinity_master
     
     docker build -f Dockerfile.master -t trinity_master:latest .
+    
+Pack Spark executor package for Mesos agents
 
+    source activate trinity
+    python pack_spark_executor.py
+    
 [optional] Docker run trinity_master
 
     docker run -d --net=host \
@@ -43,6 +48,10 @@ Build Docker image trinity_master
           -e MESOS_WORK_DIR=/var/tmp/mesos \
           --name trinity_master \
           trinity_master
+              
+### Setup Zeppelin on The Master
+wat
+     
 
 
 ## Setup Agent Cluster
