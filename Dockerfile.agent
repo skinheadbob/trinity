@@ -4,7 +4,8 @@ USER root
 ENV HOME /root/trinity
 RUN mkdir -p $HOME
 
-RUN apt-get update && apt-get install -y bzip2 gcc
+RUN apt-get update && apt-get install -y bzip2 gcc openjdk-8-jdk
+RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 COPY conda_env.yml $HOME
 COPY conda_requirement.txt $HOME

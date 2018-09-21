@@ -9,7 +9,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # FIXME 'PYSPARK_PYTHON' needs to be more flexible
 spark_env_conf = os.linesep.join([
-    'export PYSPARK_PYTHON=/root/conda/envs/trinity/bin/python3',
+    'export PYSPARK_PYTHON=/root/trinity/conda/envs/trinity/bin/python',
     'export PYTHONPATH=$SPARK_HOME/py_modules:$PYTHONPATH'
 ])
 

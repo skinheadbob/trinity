@@ -1,0 +1,45 @@
+FROM mesosphere/mesos:1.5.0
+
+USER root
+ENV HOME /root/trinity
+RUN mkdir -p $HOME
+
+RUN apt-get update && apt-get install -y bzip2 gcc openjdk-8-jdk
+RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+COPY conda_env.yml $HOME
+COPY conda_requirement.txt $HOME
+COPY conda_r_install_packages.r $HOME
+
+# download conda
+RUN ["/bin/bash", "-c", "curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s"]
+RUN chmod 0755 $HOME/miniconda.sh
+RUN ["/bin/bash", "-c", "$HOME/miniconda.sh -b -p $HOME/conda"]
+RUN rm $HOME/miniconda.sh
+ENV PATH "$HOME/conda/bin:$PATH"
+RUN ["/bin/bash", "-c", "conda update conda"]
+
+# install Python env
+RUN ["/bin/bash", "-c", "conda env create -f $HOME/conda_env.yml --force"]
+RUN ["/bin/bash", "-c", "source activate trinity && pip install --upgrade pip"]
+ENV AIRFLOW_GPL_UNIDECODE=yesf
+RUN ["/bin/bash", "-c", "source activate trinity && pip install -r $HOME/conda_requirement.txt"]
+
+# setup SPARK_HOME
+ADD ./build/output/spark-2.3.1-bin-hadoop2.7.tgz $HOME
+RUN mv $HOME/spark-2.3.1-bin-hadoop2.7 $HOME/spark
+ENV SPARK_HOME $HOME/spark
+
+# install Zeppelin
+RUN curl http://apache.mirror.cdnetworks.com/zeppelin/zeppelin-0.8.0/zeppelin-0.8.0-bin-all.tgz -o $HOME/zeppelin.tgz -s
+RUN tar xf $HOME/zeppelin.tgz -C $HOME/
+RUN mv $HOME/zeppelin-0.8.0-bin-all $HOME/zeppelin
+RUN touch $HOME/zeppelin/conf/zeppelin-env.sh
+RUN echo "export ZEPPELIN_INTP_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
+RUN echo "export ZEPPELIN_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
+RUN echo "export SPARK_HOME=$HOME/spark" >> $HOME/zeppelin/conf/zeppelin-env.sh
+RUN echo "export PYTHONPATH=$SPARK_HOME/py_modules:$PYTHONPATH" >> $HOME/zeppelin/conf/zeppelin-env.sh
+
+WORKDIR $HOME/zeppelin
+EXPOSE 8080
+CMD ["bin/zeppelin.sh"]

@@ -6,36 +6,26 @@ TBD
 
 ## Setup The Master
 Prerequisite:
-    `conda` is installed;
-    `ZooKeeper` is standing by
+    `conda` is installed on The Master;
+    `python` is installed on The Master;
+    There is a `ZooKeeper` standing by with IP=[zk_ip];
 
-Setup Python environment via conda
+Pack Spark executor package for Mesos agents
 
-    conda env create -f conda_env.yml
+    python pack_spark_executor.py
 
-Install Python libraries
-
-    # Make sure 'gfortran' is installed
-    # May need to install the following: zlib1g-dev libssl-dev libssh2-1-dev libsm6 libxt6 libxrender1
-
-
-    export AIRFLOW_GPL_UNIDECODE=yes
-    source activate trinity
-    pip install -r conda_requirement.txt
-
-Install R libraries
-
-    source activate trinity
-    Rscript conda_r_install_packages.r
-    
 Build Docker image trinity_master
     
     docker build -f Dockerfile.master -t trinity_master:latest .
     
-Pack Spark executor package for Mesos agents
+Build Docker image trinity_nginx
+    
+    docker build --rm -f Dockerfile.nginx -t trinity_nginx:latest .
 
-    source activate trinity
-    python pack_spark_executor.py
+Build Docker image trinity_zeppelin
+
+    docker build --rm -f Dockerfile.zeppelin -t trinity_zeppelin:latest .
+
     
 [optional] Docker run trinity_master
 
@@ -48,12 +38,19 @@ Pack Spark executor package for Mesos agents
           -e MESOS_WORK_DIR=/var/tmp/mesos \
           --name trinity_master \
           trinity_master
+          
+Docker run trinity_nginx
+
+    docker run -d --net=host \
+      --name trinity_nginx \
+      trinity_nginx
+      
+Docker run trinity_zeppelin
+
+    docker run -d --net=host \
+      --name trinity_zeppelin \
+      trinity_zeppelin
               
-### Setup Zeppelin on The Master
-wat
-     
-
-
 ## Setup Agent Cluster
 Build Docker image trinity_agent
 
@@ -75,3 +72,11 @@ Docker run trinity_agent
       -v "$(which docker):/usr/local/bin/docker" \
       --name trinity_agent \
       trinity_agent
+      
+## Setup Zeppelin
+Follow link `http://[master_ip]:8080/#/interpreter` to open Zeppelin interpreter config page.
+Make the following changes on interpreter `spark`,
+
+    master                  mesos://zk://[zk_ip]:2181/trinity
+    spark.executor.uri      http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz
+    zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
