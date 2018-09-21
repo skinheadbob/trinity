@@ -5,10 +5,7 @@ Trinity is a big data platform skeleton that aims to bridge the gaps among engin
 TBD
 
 ## Setup The Master
-Prerequisite:
-    `conda` is installed on The Master;
-    `python` is installed on The Master;
-    There is a `ZooKeeper` standing by with IP=[zk_ip];
+Prerequisite: `python` is installed on The Master and there is a `ZooKeeper` standing by with IP=[zk_ip];
 
 Pack Spark executor package for Mesos agents
 
@@ -16,7 +13,7 @@ Pack Spark executor package for Mesos agents
 
 Build Docker image trinity_master
     
-    docker build -f Dockerfile.master -t trinity_master:latest .
+    docker build --rm -f Dockerfile.master -t trinity_master:latest .
     
 Build Docker image trinity_nginx
     
