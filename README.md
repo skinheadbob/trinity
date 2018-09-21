@@ -11,6 +11,10 @@ Pack Spark executor package for Mesos agents
 
     python pack_spark_executor.py
 
+Build Docker image trinity_base
+
+    docker build --rm -f Dockerfile.base -t trinity_base:latest .
+
 Build Docker image trinity_master
     
     docker build --rm -f Dockerfile.master -t trinity_master:latest .
@@ -49,9 +53,13 @@ Docker run trinity_zeppelin
       trinity_zeppelin
               
 ## Setup Agent Cluster
+Build Docker image trinity_base
+
+    docker build --rm -f Dockerfile.base -t trinity_base:latest .
+
 Build Docker image trinity_agent
 
-    docker build -f Dockerfile.agent -t trinity_agent:latest .
+    docker build --rm -f Dockerfile.agent -t trinity_agent:latest .
 
 Docker run trinity_agent
 

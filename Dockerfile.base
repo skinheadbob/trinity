@@ -1,0 +1,33 @@
+FROM mesosphere/mesos:1.5.0
+
+USER root
+ENV HOME /root/trinity
+RUN mkdir -p $HOME
+
+RUN apt-get update && apt-get install -y bzip2 gcc openjdk-8-jdk build-essential
+RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+COPY conda_env.yml $HOME
+COPY conda_requirement.txt $HOME
+COPY conda_r_install_packages.r $HOME
+
+# download conda
+RUN curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s
+RUN chmod 0755 $HOME/miniconda.sh
+RUN $HOME/miniconda.sh -b -p $HOME/conda
+RUN rm $HOME/miniconda.sh
+ENV PATH "$HOME/conda/bin:$PATH"
+RUN conda update conda
+
+# install Python env
+RUN conda env create -f $HOME/conda_env.yml --force
+RUN ["/bin/bash", "-c", "source activate trinity && pip install --upgrade pip"]
+ENV AIRFLOW_GPL_UNIDECODE=yes
+RUN ["/bin/bash", "-c", "source activate trinity && pip install -r $HOME/conda_requirement.txt"]
+
+# 'install' R env
+RUN ln -s -f $HOME/conda/envs/trinity/bin/R /usr/local/bin/R
+RUN ln -s -f $HOME/conda/envs/trinity/bin/Rscript /usr/local/bin/Rscript
+# install R lib
+RUN R -e "install.packages(c('aTSA','dplyr','plyr'), repo='http://cloud.r-project.org/')"
+RUN R -e "install.packages(c('magrittr','data.table'), repo='http://cloud.r-project.org/')"
