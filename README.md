@@ -24,7 +24,7 @@ Build Docker image trinity_zeppelin
     docker build --rm -f Dockerfile.zeppelin -t trinity_zeppelin:latest .
 
     
-[optional] Docker run trinity_master
+Docker run trinity_master
 
     docker run -d --net=host \
           -e MESOS_PORT=5050 \
