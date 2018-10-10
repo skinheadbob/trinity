@@ -2,7 +2,7 @@
 Trinity is a big data platform skeleton that aims to bridge the gaps among engineer, data scientist and business analyst.
 
 ## Deployment Architecture
-TBD
+![](Deployment.Architecture.png)
 
 ## Setup The Master
 Prerequisite: `python` is installed on The Master and there is a `ZooKeeper` standing by with IP=[zk_ip];

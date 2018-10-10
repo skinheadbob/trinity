@@ -1,4 +1,5 @@
 dependency = c(
+      'knitr', # for Zeppelin
       'aTSA',
       'dplyr',
       'plyr',
