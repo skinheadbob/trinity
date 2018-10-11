@@ -1,0 +1,5 @@
+FROM rocker/rstudio:latest
+
+# add user for rstudio
+RUN useradd -m -d /home/bob bob && echo bob:bob | chpasswd \
+    && useradd -m -d /home/peng peng && echo peng:peng | chpasswd

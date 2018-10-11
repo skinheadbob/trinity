@@ -27,6 +27,9 @@ Build Docker image trinity_zeppelin
 
     docker build --rm -f Dockerfile.zeppelin -t trinity_zeppelin:latest .
 
+Build Docker image trinity_rserver
+    
+    docker build --rm -f Dockerfile.rserver -t trinity_rserver:latest .
     
 Docker run trinity_master
 
@@ -51,7 +54,15 @@ Docker run trinity_zeppelin
     docker run -d --net=host \
       --name trinity_zeppelin \
       trinity_zeppelin
-              
+      
+Docker run trinity_rserver
+
+    docker run -d --net=host \
+      --name trinity_rserver \
+      -e PASSWORD=notrstudio \
+      trinity_rserver
+      
+                    
 ## Setup Agent Cluster
 Build Docker image trinity_base
 
@@ -85,3 +96,4 @@ Make the following changes on interpreter `spark`,
     master                  mesos://zk://[zk_ip]:2181/trinity
     spark.executor.uri      http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz
     zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
+    
