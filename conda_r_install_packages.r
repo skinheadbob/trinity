@@ -4,7 +4,8 @@ dependency = c(
       'dplyr',
       'plyr',
       'magrittr',
-      'data.table'
+      'data.table',
+      'sparklyr'
 )
 
 install.packages(dependency, repo='http://cloud.r-project.org/')

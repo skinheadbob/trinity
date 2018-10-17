@@ -1,3 +1,0 @@
-FROM trinity_base
-
-ENTRYPOINT ["mesos-slave"]

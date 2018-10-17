@@ -14,10 +14,6 @@ Pack Spark executor package for Mesos agents
 Build Docker image trinity_base
 
     docker build --rm -f Dockerfile.base -t trinity_base:latest .
-
-Build Docker image trinity_master
-    
-    docker build --rm -f Dockerfile.master -t trinity_master:latest .
     
 Build Docker image trinity_nginx
     
@@ -33,15 +29,10 @@ Build Docker image trinity_rserver
     
 Docker run trinity_master
 
-    docker run -d --net=host \
-          -e MESOS_PORT=5050 \
-          -e MESOS_ZK=zk://[zk_ip]:2181/trinity \
-          -e MESOS_QUORUM=1 \
-          -e MESOS_REGISTRY=in_memory \
-          -e MESOS_LOG_DIR=/var/log/mesos \
-          -e MESOS_WORK_DIR=/var/tmp/mesos \
-          --name trinity_master \
-          trinity_master
+    docker run -d --net=host --name trinity_master trinity_base \
+        mesos-master --port=5050 --quorum=1 --registry=in_memory \
+                     --work_dir=/var/tmp/mesos --log_dir=/var/log/mesos \
+                     --zk=zk://[zk_ip]:2181/trinity
           
 Docker run trinity_nginx
 
@@ -59,7 +50,6 @@ Docker run trinity_rserver
 
     docker run -d --net=host \
       --name trinity_rserver \
-      -e PASSWORD=notrstudio \
       trinity_rserver
       
                     
@@ -68,28 +58,20 @@ Build Docker image trinity_base
 
     docker build --rm -f Dockerfile.base -t trinity_base:latest .
 
-Build Docker image trinity_agent
-
-    docker build --rm -f Dockerfile.agent -t trinity_agent:latest .
-
 Docker run trinity_agent
 
-    docker run -d --net=host --privileged \
-      -e MESOS_PORT=5051 \
-      -e MESOS_MASTER=zk://[zk_ip]:2181/trinity \
-      -e MESOS_SWITCH_USER=0 \
-      -e MESOS_CONTAINERIZERS=docker,mesos \
-      -e MESOS_LOG_DIR=/var/log/mesos \
-      -e MESOS_WORK_DIR=/var/tmp/mesos \
-      -e MESOS_SYSTEMD_ENABLE_SUPPORT=false \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      -v /cgroup:/cgroup \
-      -v /sys:/sys \
-      -v "$(which docker):/usr/local/bin/docker" \
-      --name trinity_agent \
-      trinity_agent
+    docker run -d --net=host --name trinity_agent \
+        -v /var/run/docker/sock:/var/run/docker.sock \
+        -v /cgroup:/cgroup \
+        -v /sys:/sys \
+        -v "$(which docker):/usr/local/bin/docker" \
+        trinity_base \
+        mesos-agent --port=5051 --no-systemd_enable_support --no-switch_user \
+                    --work_dir=/var/tmp/mesos --log_dir=/var/log/mesos \
+                    --master=zk://[zk_ip]:2181/trinity
+
       
-## Setup Zeppelin
+## Setup Zeppelin (on Master)
 Follow link `http://[master_ip]:8080/#/interpreter` to open Zeppelin interpreter config page.
 Make the following changes on interpreter `spark`,
 
@@ -97,3 +79,5 @@ Make the following changes on interpreter `spark`,
     spark.executor.uri      http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz
     zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
     
+## Setup RStudio (on Master)
+RStudio-server should be running at `http://[master_ip]:8787` with default user_name=password=bob 

@@ -1,4 +1,0 @@
-FROM trinity_base
-
-CMD ["--registry=in_memory"]
-ENTRYPOINT ["mesos-master"]

@@ -1,21 +1,26 @@
 FROM trinity_base
 
+ARG ZEP_VER=0.8.0
+
 # setup SPARK_HOME
 ADD ./build/output/spark-2.3.1-bin-hadoop2.7.tgz $HOME
 RUN mv $HOME/spark-2.3.1-bin-hadoop2.7 $HOME/spark
 ENV SPARK_HOME $HOME/spark
 
 # install Zeppelin
-RUN curl http://apache.mirror.cdnetworks.com/zeppelin/zeppelin-0.8.0/zeppelin-0.8.0-bin-all.tgz -o $HOME/zeppelin.tgz -s
+RUN curl http://apache.mirror.cdnetworks.com/zeppelin/zeppelin-$ZEP_VER/zeppelin-$ZEP_VER-bin-all.tgz -o $HOME/zeppelin.tgz -s
 RUN tar xf $HOME/zeppelin.tgz -C $HOME/
 RUN rm $HOME/zeppelin.tgz
-RUN mv $HOME/zeppelin-0.8.0-bin-all $HOME/zeppelin
+RUN mv $HOME/zeppelin-$ZEP_VER-bin-all $HOME/zeppelin
 RUN touch $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export ZEPPELIN_INTP_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export ZEPPELIN_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export SPARK_HOME=$HOME/spark" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export PYTHONPATH=$SPARK_HOME/py_modules:$PYTHONPATH" >> $HOME/zeppelin/conf/zeppelin-env.sh
 
+# mitigate Java 9 breaking change: not found javax/annotation/Priority
+RUN apt-get update && apt-get install -y openjdk-8-jdk
+RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
+
 WORKDIR $HOME/zeppelin
-EXPOSE 8080
 CMD ["bin/zeppelin.sh"]

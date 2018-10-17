@@ -1,5 +1,27 @@
-FROM rocker/rstudio:latest
+FROM trinity_base
+
+ARG RSTUDIO_VER=1.1.456
+ARG CONDA_R_LIB=conda_r_install_packages.r
+
+# choose system R over conda R
+ENV PATH $ORIGINAL_PATH
+
+# setup SPARK_HOME
+ADD ./build/output/spark-2.3.1-bin-hadoop2.7.tgz $HOME
+RUN mv $HOME/spark-2.3.1-bin-hadoop2.7 $HOME/spark
+ENV SPARK_HOME $HOME/spark
+
+# install RStudio
+RUN apt-get install -y gdebi-core \
+&& curl https://download2.rstudio.org/rstudio-server-$RSTUDIO_VER-amd64.deb -o $HOME/rstudio.deb -s \
+&& gdebi --n --q $HOME/rstudio.deb \
+&& rm $HOME/rstudio.deb \
+&& service rstudio-server stop
+
+# install system R libraries
+RUN ["/bin/bash", "-c", "Rscript $HOME/$CONDA_R_LIB"]
 
 # add user for rstudio
-RUN useradd -m -d /home/bob bob && echo bob:bob | chpasswd \
-    && useradd -m -d /home/peng peng && echo peng:peng | chpasswd
+RUN useradd -m -d /home/bob bob && echo bob:bob | chpasswd
+
+CMD ["bin/bash", "-c", "/usr/lib/rstudio-server/bin/rserver --server-app-armor-enabled=0 --server-daemonize=0"]

@@ -1,33 +1,67 @@
-FROM mesosphere/mesos:1.5.0
+FROM ubuntu:xenial
+
+ARG CONDA_ENV=conda_env.yml
+ARG CONDA_PIP=conda_requirement.txt
+ARG CONDA_R_LIB=conda_r_install_packages.r
 
 USER root
 ENV HOME /root/trinity
 RUN mkdir -p $HOME
 
-RUN apt-get update && apt-get install -y bzip2 gcc openjdk-8-jdk build-essential
-RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
+COPY $CONDA_ENV $HOME
+COPY $CONDA_PIP $HOME
+COPY $CONDA_R_LIB $HOME
 
-COPY conda_env.yml $HOME
-COPY conda_requirement.txt $HOME
-COPY conda_r_install_packages.r $HOME
+# setup locale
+RUN apt-get update \
+ && apt-get install locales \
+ && locale-gen en_US.UTF-8 \
+ && update-locale LANG= en_US.UTF-8
+
+# install dependent libs for R libs
+RUN apt-get update \
+ && apt-get install -y \
+            libxml2-dev libssl-dev
+
+# install system level r-base and R libraries
+RUN apt-get update \
+ && apt-get install -y r-base \
+ && Rscript $HOME/$CONDA_R_LIB
+
+# install mesos
+RUN apt-get update \
+ && apt-get install -y lsb-release gnupg \
+ && DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]') \
+ && CODENAME=$(lsb_release -cs) \
+ && echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main"| tee /etc/apt/sources.list.d/mesosphere.list \
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF \
+ && apt-get update \
+ && apt-get install -y mesos
 
 # download conda
 RUN curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s
 RUN chmod 0755 $HOME/miniconda.sh
 RUN $HOME/miniconda.sh -b -p $HOME/conda
 RUN rm $HOME/miniconda.sh
-ENV PATH "$HOME/conda/bin:$PATH"
-RUN conda update conda
+ARG CONDA_BIN=$HOME/conda/bin
+
+# update conda
+RUN $CONDA_BIN/conda update conda
 
 # install Python env
-RUN conda env create -f $HOME/conda_env.yml --force
-RUN ["/bin/bash", "-c", "source activate trinity && pip install --upgrade pip"]
+RUN $CONDA_BIN/conda env create -f $HOME/$CONDA_ENV --force
+ARG TRINITY_BIN=$HOME/conda/envs/trinity/bin
+RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && pip install --upgrade pip"]
 ENV AIRFLOW_GPL_UNIDECODE=yes
-RUN ["/bin/bash", "-c", "source activate trinity && pip install -r $HOME/conda_requirement.txt"]
+RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && pip install -r $HOME/$CONDA_PIP"]
 
-# 'install' R env
-RUN ln -s -f $HOME/conda/envs/trinity/bin/R /usr/local/bin/R
-RUN ln -s -f $HOME/conda/envs/trinity/bin/Rscript /usr/local/bin/Rscript
-# install R lib
-RUN R -e "install.packages(c('aTSA','dplyr','plyr'), repo='http://cloud.r-project.org/')"
-RUN R -e "install.packages(c('magrittr','data.table'), repo='http://cloud.r-project.org/')"
+# install conda R libraries
+RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && Rscript $HOME/$CONDA_R_LIB"]
+
+# clean conda
+RUN $CONDA_BIN/conda clean -a -y
+
+# choose conda_r over system R
+ENV ORIGINAL_PATH $PATH
+ENV PATH "$TRINITY_BIN:$PATH"
+# to restore PATH: ENV PATH $ORIGINAL_PATH
