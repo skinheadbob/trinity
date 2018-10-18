@@ -21,7 +21,7 @@ RUN apt-get update \
 # install dependent libs for R libs
 RUN apt-get update \
  && apt-get install -y \
-            libxml2-dev libssl-dev
+            libxml2-dev libssl-dev libcurl4-openssl-dev
 
 # install system level r-base and R libraries
 RUN apt-get update \
