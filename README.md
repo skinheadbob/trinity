@@ -102,5 +102,5 @@ To give sparklyr a test drive, follow the steps below,
         
 2. Run the following R code to create `sc`, spark context object,
 
-    `library(sparklyr)`
+    `library(sparklyr)`<br/>
     `sc <- spark_connect(master='mesos://zk://[zk_ip]:2181/trinity', spark_home='/share/spark', config=spark_config(file='spark_config.yml', use_default=TRUE) )`
