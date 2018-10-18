@@ -18,9 +18,5 @@ RUN echo "export ZEPPELIN_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zepp
 RUN echo "export SPARK_HOME=$HOME/spark" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export PYTHONPATH=$SPARK_HOME/py_modules:$PYTHONPATH" >> $HOME/zeppelin/conf/zeppelin-env.sh
 
-# mitigate Java 9 breaking change: not found javax/annotation/Priority
-RUN apt-get update && apt-get install -y openjdk-8-jdk
-RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
-
 WORKDIR $HOME/zeppelin
 CMD ["bin/zeppelin.sh"]
