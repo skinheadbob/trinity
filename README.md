@@ -83,5 +83,14 @@ Make the following changes on interpreter `spark`,
     spark.executor.uri      http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz
     zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
     
+To give Zeppelin a test drive, create a new note and try running the following code,
+
+    %pyspark
+    from example.myawesomelib.hello import greet
+    spark.sparkContext.parallelize( [i for i in range(1,10000000)] ).map(lambda i: greet( str(i) ) ).take(100)[41]
+
+The Mesos master UI should be available at `http://[master_ip]:5050`.
+
+    
 ## Setup RStudio (on Master)
 RStudio-server should be running at `http://[master_ip]:8787` with default user_name=password=bob 

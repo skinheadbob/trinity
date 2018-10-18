@@ -65,3 +65,7 @@ RUN $CONDA_BIN/conda clean -a -y
 ENV ORIGINAL_PATH $PATH
 ENV PATH "$TRINITY_BIN:$PATH"
 # to restore PATH: ENV PATH $ORIGINAL_PATH
+
+# switch to Java 8 in order to mitigate the Java 9 breaking change of 'module'
+RUN apt-get update && apt-get install -y openjdk-8-jdk
+RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64
