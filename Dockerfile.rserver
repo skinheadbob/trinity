@@ -24,4 +24,9 @@ RUN ["/bin/bash", "-c", "Rscript $HOME/$CONDA_R_LIB"]
 # add user for rstudio
 RUN useradd -m -d /home/bob bob && echo bob:bob | chpasswd
 
+# make spark installation accessible for all (RStudio) users
+RUN mkdir /share
+RUN cp -R $SPARK_HOME /share/
+RUN chmod -R 777 /share/spark
+
 CMD ["bin/bash", "-c", "/usr/lib/rstudio-server/bin/rserver --server-app-armor-enabled=0 --server-daemonize=0"]
