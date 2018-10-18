@@ -98,9 +98,9 @@ To give sparklyr a test drive, follow the steps below,
 1. In Rstudio-server, create file `spark_config.yml` with following content,
 
     default:<br/>
-        spark.executor.uri: "http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz"
+    &nbsp;&nbsp;spark.executor.uri: "http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz"
         
 2. Run the following R code to create `sc`, spark context object,
 
-    `library(sparklyr)`
+    `library(sparklyr)`<br/>
     `sc <- spark_connect(master='mesos://zk://[zk_ip]:2181/trinity', spark_home='/share/spark', config=spark_config(file='spark_config.yml', use_default=TRUE) )`
