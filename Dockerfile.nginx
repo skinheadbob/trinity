@@ -1,3 +1,6 @@
 FROM nginx
-COPY build/output/spark-2.3.1-bin-hadoop2.7.tgz /usr/share/nginx/html
-RUN chmod o+r /usr/share/nginx/html/spark-2.3.1-bin-hadoop2.7.tgz
+
+ARG SPARK_VER=2.3.2
+
+COPY build/output/spark-$SPARK_VER-bin-hadoop2.7.tgz /usr/share/nginx/html
+RUN chmod o+r /usr/share/nginx/html/spark-$SPARK_VER-bin-hadoop2.7.tgz

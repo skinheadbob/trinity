@@ -2,13 +2,15 @@ FROM trinity_base
 
 ARG RSTUDIO_VER=1.1.456
 ARG CONDA_R_LIB=conda_r_install_packages.r
+ARG SPARK_VER=2.3.2
+
 
 # choose system R over conda R
 ENV PATH $ORIGINAL_PATH
 
 # setup SPARK_HOME
-ADD ./build/output/spark-2.3.1-bin-hadoop2.7.tgz $HOME
-RUN mv $HOME/spark-2.3.1-bin-hadoop2.7 $HOME/spark
+ADD ./build/output/spark-$SPARK_VER-bin-hadoop2.7.tgz $HOME
+RUN mv $HOME/spark-$SPARK_VER-bin-hadoop2.7 $HOME/spark
 ENV SPARK_HOME $HOME/spark
 
 # install RStudio

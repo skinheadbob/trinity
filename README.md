@@ -80,7 +80,7 @@ Follow link `http://[master_ip]:8080/#/interpreter` to open Zeppelin interpreter
 Make the following changes on interpreter `spark`,
 
     master                  mesos://zk://[zk_ip]:2181/trinity
-    spark.executor.uri      http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz
+    spark.executor.uri      http://[master_ip]/spark-2.3.2-bin-hadoop2.7.tgz
     zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
     
 To give Zeppelin a test drive, create a new note and try running the following code,
@@ -98,7 +98,7 @@ To give sparklyr a test drive, follow the steps below,
 1. In Rstudio-server, create file `spark_config.yml` with following content,
 
     default:<br/>
-    &nbsp;&nbsp;spark.executor.uri: "http://[master_ip]/spark-2.3.1-bin-hadoop2.7.tgz"
+    &nbsp;&nbsp;spark.executor.uri: "http://[master_ip]/spark-2.3.2-bin-hadoop2.7.tgz"
         
 2. Run the following R code to create `sc`, spark context object,
 

@@ -14,11 +14,13 @@ spark_env_conf = os.linesep.join([
 ])
 
 base_dir = 'build'
+SPARK_VER = '2.3.2'
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
 
-spark_tmpl_url = 'http://apache.tt.co.kr/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz'
+spark_tmpl_url = 'http://apache.tt.co.kr/spark/spark-%(spark_ver)s/spark-%(spark_ver)s-bin-hadoop2.7.tgz' \
+                 % {'spark_ver': SPARK_VER}
 spark_tmpl_name = spark_tmpl_url.split('/')[-1]
 spark_tmpl_path = base_dir + '/' + spark_tmpl_name
 
