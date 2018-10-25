@@ -105,3 +105,30 @@ To give sparklyr a test drive, follow the steps below,
 
     `library(sparklyr)`<br/>
     `sc <- spark_connect(master='mesos://zk://[zk_ip]:2181/trinity_dev', spark_home='/share/spark', config=spark_config(file='spark_config.yml', use_default=TRUE) )`
+
+
+## Update Your Code on Master
+After submitting your latest code, to make to latest code available to the cluster, please run the following commands on The Master,
+
+    git pull
+    
+    python pack_spark_executor.py
+    
+    docker build --rm -f Dockerfile.nginx -t trinity_nginx:latest .
+    
+    docker run -d --net=host \
+      --name trinity_nginx \
+      trinity_nginx
+      
+    docker build --rm -f Dockerfile.zeppelin -t trinity_zeppelin:latest .
+    
+    docker run -d --net=host \
+      --name trinity_zeppelin \
+      -e 'TRINITY_ENV=DEV' \
+      trinity_zeppelin
+      
+    docker build --rm -f Dockerfile.rserver -t trinity_rserver:latest .
+
+    docker run -d --net=host \
+      --name trinity_rserver \
+      trinity_rserver
