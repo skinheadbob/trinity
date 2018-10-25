@@ -32,7 +32,7 @@ Docker run trinity_master
     docker run -d --net=host --name trinity_master trinity_base \
         mesos-master --port=5050 --quorum=1 --registry=in_memory \
                      --work_dir=/var/tmp/mesos --log_dir=/var/log/mesos \
-                     --zk=zk://[zk_ip]:2181/trinity
+                     --zk=zk://[zk_ip]:2181/trinity_dev
           
 Docker run trinity_nginx
 
@@ -44,6 +44,7 @@ Docker run trinity_zeppelin
 
     docker run -d --net=host \
       --name trinity_zeppelin \
+      -e 'TRINITY_ENV=DEV' \
       trinity_zeppelin
       
 Docker run trinity_rserver
@@ -72,14 +73,14 @@ Docker run trinity_agent
         trinity_base \
         mesos-agent --port=5051 --no-systemd_enable_support --no-switch_user \
                     --work_dir=/var/tmp/mesos --log_dir=/var/log/mesos \
-                    --master=zk://[zk_ip]:2181/trinity
+                    --master=zk://[zk_ip]:2181/trinity_dev
 
       
 ## Setup Zeppelin (on Master)
 Follow link `http://[master_ip]:8080/#/interpreter` to open Zeppelin interpreter config page.
 Make the following changes on interpreter `spark`,
 
-    master                  mesos://zk://[zk_ip]:2181/trinity
+    master                  mesos://zk://[zk_ip]:2181/trinity_dev
     spark.executor.uri      http://[master_ip]/spark-2.3.2-bin-hadoop2.7.tgz
     zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
     
@@ -103,4 +104,4 @@ To give sparklyr a test drive, follow the steps below,
 2. Run the following R code to create `sc`, spark context object,
 
     `library(sparklyr)`<br/>
-    `sc <- spark_connect(master='mesos://zk://[zk_ip]:2181/trinity', spark_home='/share/spark', config=spark_config(file='spark_config.yml', use_default=TRUE) )`
+    `sc <- spark_connect(master='mesos://zk://[zk_ip]:2181/trinity_dev', spark_home='/share/spark', config=spark_config(file='spark_config.yml', use_default=TRUE) )`

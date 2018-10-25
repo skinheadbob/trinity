@@ -6,8 +6,6 @@ import time
 import boto3
 from pyspark.sql import SparkSession
 
-from env import env
-
 
 def get_asg_inservice_instance_count(asg_name: str, region_name: str) -> int:
     client = boto3.client('autoscaling', region_name=region_name)
@@ -56,6 +54,8 @@ def get_spark_worker_node_count(spark):
 
 
 def setup_spark_session() -> SparkSession:
+    from envconfig.env import env
+
     asg_name = env.aws_asg_name
     region_name = env.aws_region_name
     cluster_size = env.aws_cluster_size
@@ -80,6 +80,8 @@ def setup_spark_session() -> SparkSession:
 
 def prep_notebook(spark, aws_cluster_size: int = None, aws_asg_name: str = None, aws_region_name: str = None,
                   setup_spark_cluster_timeout_sec: int = None):
+    from envconfig.env import env
+
     if aws_cluster_size is None:
         aws_cluster_size = env.aws_cluster_size
     if aws_asg_name is None:
@@ -102,6 +104,8 @@ def prep_notebook(spark, aws_cluster_size: int = None, aws_asg_name: str = None,
 
 
 def shutdown_notebook(aws_asg_name: str = None, aws_region_name: str = None):
+    from envconfig.env import env
+
     if aws_asg_name is None:
         aws_asg_name = env.aws_asg_name
     if aws_region_name is None:
