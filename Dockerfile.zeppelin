@@ -3,9 +3,6 @@ FROM trinity_base
 ARG ZEP_VER=0.8.0
 ARG SPARK_VER=2.3.2
 
-# setup SPARK_HOME
-ADD ./build/output/spark-$SPARK_VER-bin-hadoop2.7.tgz $HOME
-RUN mv $HOME/spark-$SPARK_VER-bin-hadoop2.7 $HOME/spark
 ENV SPARK_HOME $HOME/spark
 
 # install Zeppelin
@@ -18,6 +15,10 @@ RUN echo "export ZEPPELIN_INTP_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf
 RUN echo "export ZEPPELIN_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export SPARK_HOME=$HOME/spark" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export PYTHONPATH=$SPARK_HOME/py_modules:$PYTHONPATH" >> $HOME/zeppelin/conf/zeppelin-env.sh
+
+# setup SPARK_HOME
+ADD ./build/output/spark-$SPARK_VER-bin-hadoop2.7.tgz $HOME
+RUN mv $HOME/spark-$SPARK_VER-bin-hadoop2.7 $SPARK_HOME
 
 WORKDIR $HOME/zeppelin
 CMD ["bin/zeppelin.sh"]
