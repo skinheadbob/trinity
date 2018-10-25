@@ -1,0 +1,141 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Welcome to Trinity.\n##### This is a live tutorial, you can run the code yourself. (Shift-Enter to Run)\n\n```\nYou may refer to \u0027envconfig/config.ini\u0027 to understand the runtime environemnt, such as \u0027which Redshift am I connected to\u0027, \u0027which S3 am I dumping data into\u0027, etc.\n```",
+      "user": "anonymous",
+      "dateUpdated": "2018-10-25 06:33:03.832",
+      "config": {
+        "colWidth": 12.0,
+        "editorHide": true,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "editorMode": "ace/mode/markdown",
+        "tableHide": false,
+        "fontSize": 9.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eWelcome to Trinity.\u003c/h2\u003e\n\u003ch5\u003eThis is a live tutorial, you can run the code yourself. (Shift-Enter to Run)\u003c/h5\u003e\n\u003cpre\u003e\u003ccode\u003eYou may refer to \u0026#39;envconfig/config.ini\u0026#39; to understand the runtime environemnt, such as \u0026#39;which Redshift am I connected to\u0026#39;, \u0026#39;which S3 am I dumping data into\u0026#39;, etc.\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1423836981412_-1007008116",
+      "id": "20150213-231621_168813393",
+      "dateCreated": "2015-02-13 23:16:21.000",
+      "dateStarted": "2018-10-25 06:33:03.832",
+      "dateFinished": "2018-10-25 06:33:03.836",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Setup Cluster",
+      "text": "%pyspark\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2018-10-25 06:34:25.511",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1540449195943_1996309560",
+      "id": "20181025-063315_2037313970",
+      "dateCreated": "2018-10-25 06:33:15.943",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Shutdown Cluster",
+      "text": "%pyspark\n",
+      "user": "anonymous",
+      "dateUpdated": "2018-10-25 06:33:34.044",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1540449207933_-1552828735",
+      "id": "20181025-063327_1685760150",
+      "dateCreated": "2018-10-25 06:33:27.933",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1435955447812_-158639899",
+      "id": "20150703-133047_853701097",
+      "dateCreated": "2015-07-03 13:30:47.000",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Zeppelin Tutorial/Trinity(Spark)",
+  "id": "2A94M5J1Z",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "looknfeel": "default",
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

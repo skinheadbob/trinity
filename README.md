@@ -45,6 +45,7 @@ Docker run trinity_zeppelin
     docker run -d --net=host \
       --name trinity_zeppelin \
       -e 'TRINITY_ENV=DEV' \
+      -v "$(pwd)/docker_volume/zeppelin/notebook:/root/trinity/zeppelin/notebook" \
       trinity_zeppelin
       
 Docker run trinity_rserver

@@ -41,7 +41,7 @@ with tarfile.open(spark_tmpl_path, 'r') as t:
 print('copying my python modules to spark package...')
 py_module_dir = spark_tmpl_dir + '/' + 'py_modules'
 os.mkdir(py_module_dir)
-exclude_dirs = ['tests', 'build']
+exclude_dirs = ['tests', 'build', 'docker_volume']
 to_cp_dir_list = list(
     filter(lambda d: (d not in exclude_dirs) and (not d.startswith('.')),
            next(os.walk('.'))[1]))
