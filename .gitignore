@@ -108,3 +108,5 @@ venv.bak/
 .idea
 memo
 
+docker_volume
+!docker_volume/zeppelin/notebook/2A94M5J1Z/note.json

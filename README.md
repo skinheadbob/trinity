@@ -81,9 +81,12 @@ Docker run trinity_agent
 Follow link `http://[master_ip]:8080/#/interpreter` to open Zeppelin interpreter config page.
 Make the following changes on interpreter `spark`,
 
-    master                  mesos://zk://[zk_ip]:2181/trinity_dev
-    spark.executor.uri      http://[master_ip]/spark-2.3.2-bin-hadoop2.7.tgz
-    zeppelin.pyspark.python	/root/trinity/conda/envs/trinity/bin/python
+    master                       mesos://zk://[zk_ip]:2181/trinity_dev
+    spark.executor.uri           http://[master_ip]/spark-2.3.2-bin-hadoop2.7.tgz
+    zeppelin.pyspark.python	     /root/trinity/conda/envs/trinity/bin/python
+    spark.driver.memory          48g
+    spark.executor.memory        48g
+    spark.sql.shuffle.partitions 2160
     
 To give Zeppelin a test drive, create a new note and try running the following code,
 

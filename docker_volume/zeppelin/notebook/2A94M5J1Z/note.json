@@ -3,7 +3,7 @@
     {
       "text": "%md\n## Welcome to Trinity.\n##### This is a live tutorial, you can run the code yourself. (Shift-Enter to Run)\n\n```\nYou may refer to \u0027envconfig/config.ini\u0027 to understand the runtime environemnt, such as \u0027which Redshift am I connected to\u0027, \u0027which S3 am I dumping data into\u0027, etc.\n```",
       "user": "anonymous",
-      "dateUpdated": "2018-10-25 06:33:03.832",
+      "dateUpdated": "2018-10-25 09:06:53.599",
       "config": {
         "colWidth": 12.0,
         "editorHide": true,
@@ -23,7 +23,8 @@
         "enabled": true,
         "editorSetting": {
           "language": "markdown",
-          "editOnDblClick": true
+          "editOnDblClick": true,
+          "completionSupport": false
         },
         "editorMode": "ace/mode/markdown",
         "tableHide": false,
@@ -46,16 +47,16 @@
       "jobName": "paragraph_1423836981412_-1007008116",
       "id": "20150213-231621_168813393",
       "dateCreated": "2015-02-13 23:16:21.000",
-      "dateStarted": "2018-10-25 06:33:03.832",
-      "dateFinished": "2018-10-25 06:33:03.836",
+      "dateStarted": "2018-10-25 09:06:53.599",
+      "dateFinished": "2018-10-25 09:06:53.604",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Setup Cluster",
-      "text": "%pyspark\n\n\n",
+      "text": "%pyspark\nfrom aws.ec2util import prep_notebook\nfrom envconfig.env import env\n\nprint(\u0027Environment set to: \u0027+env.env)\nprep_notebook(spark)",
       "user": "anonymous",
-      "dateUpdated": "2018-10-25 06:34:25.511",
+      "dateUpdated": "2018-10-25 09:06:15.245",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -68,7 +69,8 @@
           "completionSupport": true
         },
         "editorMode": "ace/mode/python",
-        "title": true
+        "title": true,
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -78,27 +80,72 @@
       "jobName": "paragraph_1540449195943_1996309560",
       "id": "20181025-063315_2037313970",
       "dateCreated": "2018-10-25 06:33:15.943",
-      "status": "READY",
+      "dateStarted": "2018-10-25 09:01:36.110",
+      "dateFinished": "2018-10-25 09:02:41.628",
+      "status": "FINISHED",
+      "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
-      "title": "Shutdown Cluster",
-      "text": "%pyspark\n",
+      "text": "%md\n```\nAt this point the Spark UI should be available at port \u00274040\u0027, Mesos UI should be available at port \u00275050\u0027.\n```",
       "user": "anonymous",
-      "dateUpdated": "2018-10-25 06:33:34.044",
+      "dateUpdated": "2018-10-25 09:06:38.527",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
         "enabled": true,
         "results": {},
         "editorSetting": {
-          "language": "scala",
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cpre\u003e\u003ccode\u003eAt this point the Spark UI should be available at port \u0026#39;4040\u0026#39;, Mesos UI should be available at port \u0026#39;5050\u0026#39;.\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1540457811480_-557463399",
+      "id": "20181025-085651_92894867",
+      "dateCreated": "2018-10-25 08:56:51.480",
+      "dateStarted": "2018-10-25 09:06:38.528",
+      "dateFinished": "2018-10-25 09:06:38.536",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Shutdown Cluster",
+      "text": "%pyspark\nfrom aws.ec2util import shutdown_notebook\n\nshutdown_notebook()",
+      "user": "anonymous",
+      "dateUpdated": "2018-10-25 09:06:29.064",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "python",
           "editOnDblClick": false,
           "completionKey": "TAB",
           "completionSupport": true
         },
-        "editorMode": "ace/mode/scala",
-        "title": true
+        "editorMode": "ace/mode/python",
+        "title": true,
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -108,7 +155,10 @@
       "jobName": "paragraph_1540449207933_-1552828735",
       "id": "20181025-063327_1685760150",
       "dateCreated": "2018-10-25 06:33:27.933",
-      "status": "READY",
+      "dateStarted": "2018-10-25 09:01:41.997",
+      "dateFinished": "2018-10-25 09:03:27.237",
+      "status": "FINISHED",
+      "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -122,6 +172,7 @@
       "id": "20150703-133047_853701097",
       "dateCreated": "2015-07-03 13:30:47.000",
       "status": "READY",
+      "errorMessage": "",
       "progressUpdateIntervalMs": 500
     }
   ],
