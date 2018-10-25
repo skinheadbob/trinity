@@ -129,6 +129,7 @@ After submitting your latest code, to make to latest code available to the clust
     docker run -d --net=host \
       --name trinity_zeppelin \
       -e 'TRINITY_ENV=DEV' \
+      -v "$(pwd)/docker_volume/zeppelin/notebook:/root/trinity/zeppelin/notebook" \
       trinity_zeppelin
       
     docker build --rm -f Dockerfile.rserver -t trinity_rserver:latest .
