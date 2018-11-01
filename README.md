@@ -112,7 +112,7 @@ To give sparklyr a test drive, follow the steps below,
 
 
 ## Update Your Code on Master
-After submitting your latest code, to make to latest code available to the cluster, please run the following commands on The Master,
+After submitting your latest code, to make the latest code available to the cluster, please run the following commands on The Master,
 
     git pull
     
