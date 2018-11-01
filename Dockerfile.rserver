@@ -10,7 +10,8 @@ ENV SPARK_HOME $HOME/spark
 ENV PATH $ORIGINAL_PATH
 
 # install RStudio
-RUN apt-get install -y gdebi-core \
+RUN apt-get update \
+&& apt-get install -y gdebi-core \
 && curl https://download2.rstudio.org/rstudio-server-$RSTUDIO_VER-amd64.deb -o $HOME/rstudio.deb -s \
 && gdebi --n --q $HOME/rstudio.deb \
 && rm $HOME/rstudio.deb \
