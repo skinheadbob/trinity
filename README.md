@@ -110,6 +110,8 @@ To give sparklyr a test drive, follow the steps below,
     `library(sparklyr)`<br/>
     `sc <- spark_connect(master='mesos://zk://[zk_ip]:2181/trinity_dev', spark_home='/share/spark', config=spark_config(file='spark_config.yml', use_default=TRUE) )`
 
+## Update R dependency
+You may need to install some R libraries on the cluster from time to time. The general idea is to install them on Master and Agent seperately.
 
 ## Update Your Code on Master
 After submitting your latest code, to make the latest code available to the cluster, please run the following commands on The Master,
