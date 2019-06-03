@@ -56,10 +56,6 @@ Docker run trinity_rserver
       
                     
 ## Setup Agent Cluster
-Pack Spark executor package for Mesos agents
-
-    python pack_spark_executor.py
-
 Build Docker image trinity_base
 
     docker build --rm -f Dockerfile.base -t trinity_base:latest .
