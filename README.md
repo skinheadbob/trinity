@@ -78,11 +78,18 @@ Follow link `http://[master_ip]:8080/#/interpreter` to open Zeppelin interpreter
 Make the following changes on interpreter `spark`,
 
     master                       mesos://zk://[zk_ip]:2181/trinity_dev
-    spark.executor.uri           http://[master_ip]/spark-2.3.2-bin-hadoop2.7.tgz
+    spark.executor.uri           http://[master_ip]/spark-2.4.3-bin-hadoop2.7.tgz
     zeppelin.pyspark.python	     /root/trinity/conda/envs/trinity/bin/python
     spark.driver.memory          48g
     spark.executor.memory        48g
     spark.sql.shuffle.partitions 2160
+    
+    hive_metastore_uris = thrift://[hive_ip]:9083
+    spark_driver_extraJavaOptions = -Dcom.amazonaws.services.s3.enableV4=true -Dcom.amazonaws.services.s3.enforceV4=true
+    spark_executor_extraJavaOptions = -Dcom.amazonaws.services.s3.enableV4=true -Dcom.amazonaws.services.s3.enforceV4=true
+    spark_hadoop_fs_s3_impl = org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark_hadoop_fs_s3a_endpoint = [S3 endpoint, e.g. s3.ap-northeast.amazonaws.com]
+    spark_sql_catalogImplementation = hive
     
 To give Zeppelin a test drive, create a new note and try running the following code,
 
@@ -109,7 +116,7 @@ To give sparklyr a test drive, follow the steps below,
 ## Update R dependency
 You may need to install some R libraries on the cluster from time to time. The general idea is to install them on Master and Agent seperately.
 
-## Update Your Code on Master
+## Update Your Code from Master
 After submitting your latest code, to make the latest code available to the cluster, please run the following commands on The Master,
 
     git pull
