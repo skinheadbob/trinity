@@ -1,24 +1,21 @@
 FROM trinity_base
 
-ARG RSTUDIO_VER=1.1.456
+ARG RSTUDIO_VER=1.2.1335
 ARG CONDA_R_LIB=conda_r_install_packages.r
-ARG SPARK_VER=2.3.2
+ARG SPARK_VER=2.4.3
 
 ENV SPARK_HOME $HOME/spark
 
 # choose system R over conda R
 ENV PATH $ORIGINAL_PATH
 
-# install RStudio
-RUN apt-get update \
-&& apt-get install -y gdebi-core \
-&& curl https://download2.rstudio.org/rstudio-server-$RSTUDIO_VER-amd64.deb -o $HOME/rstudio.deb -s \
-&& gdebi --n --q $HOME/rstudio.deb \
-&& rm $HOME/rstudio.deb \
-&& service rstudio-server stop
-
-# install system R libraries
+ # install system R libraries
 RUN ["/bin/bash", "-c", "Rscript $HOME/$CONDA_R_LIB"]
+
+# install RStudio
+RUN curl https://download2.rstudio.org/server/centos6/x86_64/rstudio-server-rhel-$RSTUDIO_VER-x86_64.rpm -o $HOME/rstudio-server-rhel-$RSTUDIO_VER-x86_64.rpm -s
+RUN yum update -y -q \
+ && yum install $HOME/rstudio-server-rhel-$RSTUDIO_VER-x86_64.rpm -y -q
 
 # add user for rstudio
 RUN useradd -m -d /home/bob bob && echo bob:bob | chpasswd

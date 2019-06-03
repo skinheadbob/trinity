@@ -1,7 +1,7 @@
 FROM trinity_base
 
-ARG ZEP_VER=0.8.0
-ARG SPARK_VER=2.3.2
+ARG ZEP_VER=0.8.1
+ARG SPARK_VER=2.4.3
 
 ENV SPARK_HOME $HOME/spark
 
@@ -11,8 +11,8 @@ RUN tar xf $HOME/zeppelin.tgz -C $HOME/
 RUN rm $HOME/zeppelin.tgz
 RUN mv $HOME/zeppelin-$ZEP_VER-bin-all $HOME/zeppelin
 RUN touch $HOME/zeppelin/conf/zeppelin-env.sh
-RUN echo "export ZEPPELIN_INTP_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
-RUN echo "export ZEPPELIN_MEM='-Xms1024m -Xmx1024m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
+RUN echo "export ZEPPELIN_INTP_MEM='-Xms1024m -Xmx2048m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
+RUN echo "export ZEPPELIN_MEM='-Xms1024m -Xmx2048m'" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export SPARK_HOME=$HOME/spark" >> $HOME/zeppelin/conf/zeppelin-env.sh
 RUN echo "export PYTHONPATH=$SPARK_HOME/py_modules:$PYTHONPATH" >> $HOME/zeppelin/conf/zeppelin-env.sh
 

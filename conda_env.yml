@@ -1,11 +1,28 @@
 name: trinity
 
 channels:
-- conda-forge
-- defaults
+  - conda-forge
+  - defaults
 
 dependencies:
-- python=3.6
-- matplotlib
-- r-base
-- rpy2
+  - python
+  - matplotlib
+  - r-base
+  - rpy2
+  - pip
+  - fbprophet
+  - pip:
+      - numpy
+      - pandas
+      - statsmodels
+      - scikit-learn
+      - scipy
+      - pyspark==2.4.3
+      - psycopg2
+      - requests
+      - pywebhdfs
+      - cycler
+      - django
+      - coolname
+      - boto3
+      - apache-airflow[postgres, s3]

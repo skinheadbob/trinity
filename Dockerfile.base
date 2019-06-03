@@ -1,7 +1,6 @@
-FROM ubuntu:xenial
+FROM centos:7
 
 ARG CONDA_ENV=conda_env.yml
-ARG CONDA_PIP=conda_requirement.txt
 ARG CONDA_R_LIB=conda_r_install_packages.r
 
 USER root
@@ -9,51 +8,46 @@ ENV HOME /root/trinity
 RUN mkdir -p $HOME
 
 COPY $CONDA_ENV $HOME
-COPY $CONDA_PIP $HOME
 COPY $CONDA_R_LIB $HOME
 
-# setup locale
-RUN apt-get update \
- && apt-get install locales \
- && locale-gen en_US.UTF-8 \
- && update-locale LANG= en_US.UTF-8
+RUN yum update -y -q \
+ && yum install libcurl-devel openssl-devel libxml2-devel -y -q
 
-# install dependent libs for R libs
-RUN apt-get update \
- && apt-get install -y \
-            libxml2-dev libssl-dev libcurl4-openssl-dev
+# install R on OS
+RUN yum update -y -q \
+ && yum install epel-release -y -q \
+ && yum install R -y -q
 
-# install system level r-base and R libraries
-RUN apt-get update \
- && apt-get install -y r-base \
- && Rscript $HOME/$CONDA_R_LIB
+RUN Rscript $HOME/$CONDA_R_LIB
 
 # install mesos
-RUN apt-get update \
- && apt-get install -y lsb-release gnupg \
- && DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]') \
- && CODENAME=$(lsb_release -cs) \
- && echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main"| tee /etc/apt/sources.list.d/mesosphere.list \
- && apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF \
- && apt-get update \
- && apt-get install -y mesos
+RUN echo -e "\
+#bintray-mesos-el - packages by mesos from Bintray\n\
+[bintray-mesos-el]\n\
+name=bintray-mesos-el\n\
+baseurl=https://dl.bintray.com/mesos/el/7/x86_64\n\
+gpgcheck=0\n\
+repo_gpgcheck=0\n\
+enabled=1" > /tmp/bintray-mesos-el.repo
+RUN mv /tmp/bintray-mesos-el.repo /etc/yum.repos.d/bintray-mesos-el.repo \
+ && yum update -y -q \
+ && yum install mesos -y -q
 
 # download conda
-RUN curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s
+RUN yum update -y -q \
+ && yum install bzip2 postgresql-devel -y -q
+RUN curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o $HOME/miniconda.sh -s
 RUN chmod 0755 $HOME/miniconda.sh
 RUN $HOME/miniconda.sh -b -p $HOME/conda
 RUN rm $HOME/miniconda.sh
 ARG CONDA_BIN=$HOME/conda/bin
+RUN $CONDA_BIN/conda update conda -y -q
 
-# update conda
-RUN $CONDA_BIN/conda update conda
-
-# install Python env
-RUN $CONDA_BIN/conda env create -f $HOME/$CONDA_ENV --force
-ARG TRINITY_BIN=$HOME/conda/envs/trinity/bin
-RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && pip install --upgrade pip"]
+# create conda env
+RUN yum update -y -q \
+ && yum install postgresql-devel -y -q
 ENV AIRFLOW_GPL_UNIDECODE=yes
-RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && pip install -r $HOME/$CONDA_PIP"]
+RUN $CONDA_BIN/conda env create -f $HOME/$CONDA_ENV --force
 
 # install conda R libraries
 RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && Rscript $HOME/$CONDA_R_LIB"]
@@ -62,10 +56,7 @@ RUN ["/bin/bash", "-c", "source $CONDA_BIN/activate trinity && Rscript $HOME/$CO
 RUN $CONDA_BIN/conda clean -a -y
 
 # choose conda_r over system R
+ARG TRINITY_BIN=$HOME/conda/envs/trinity/bin
 ENV ORIGINAL_PATH $PATH
 ENV PATH "$TRINITY_BIN:$PATH"
 # to restore PATH: ENV PATH $ORIGINAL_PATH
-
-# switch to Java 8 in order to mitigate the Java 9 breaking change of 'module'
-RUN apt-get update && apt-get install -y openjdk-8-jdk
-RUN update-java-alternatives -s /usr/lib/jvm/java-1.8.0-openjdk-amd64

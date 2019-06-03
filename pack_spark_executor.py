@@ -1,8 +1,7 @@
 import os
+import requests
 import shutil
 import tarfile
-
-import requests
 
 # change working directory to 'here'
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -14,13 +13,15 @@ spark_env_conf = os.linesep.join([
 ])
 
 base_dir = 'build'
-SPARK_VER = '2.3.2'
+SPARK_VER = '2.4.3'
+AWS_SDK_VER = '1.7.4'
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
 
-spark_tmpl_url = 'http://apache.tt.co.kr/spark/spark-%(spark_ver)s/spark-%(spark_ver)s-bin-hadoop2.7.tgz' \
+spark_tmpl_url = 'http://apache.mirror.cdnetworks.com/spark/spark-%(spark_ver)s/spark-%(spark_ver)s-bin-hadoop2.7.tgz' \
                  % {'spark_ver': SPARK_VER}
+
 spark_tmpl_name = spark_tmpl_url.split('/')[-1]
 spark_tmpl_path = base_dir + '/' + spark_tmpl_name
 
@@ -28,6 +29,29 @@ print('downloading template spark package...')
 if not os.path.exists(spark_tmpl_path):
     r = requests.get(spark_tmpl_url, stream=True)
     with open(spark_tmpl_path, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
+aws_java_sdk_jar_url = \
+    'http://central.maven.org/maven2/com/amazonaws/aws-java-sdk/%(aws_sdk_ver)s/aws-java-sdk-%(aws_sdk_ver)s.jar' \
+    % {'aws_sdk_ver': AWS_SDK_VER}
+aws_java_sdk_jar_path = base_dir + '/' + aws_java_sdk_jar_url.split('/')[-1]
+print('downloading aws-java-sdk jar...')
+if not os.path.exists(aws_java_sdk_jar_path):
+    r = requests.get(aws_java_sdk_jar_url, stream=True)
+    with open(aws_java_sdk_jar_path, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
+hadoop_aws_jar_url = \
+    'http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.3/hadoop-aws-2.7.3.jar'
+hadoop_aws_jar_path = base_dir + '/' + hadoop_aws_jar_url.split('/')[-1]
+print('downloading hadoop-aws jar...')
+if not os.path.exists(hadoop_aws_jar_path):
+    r = requests.get(hadoop_aws_jar_url, stream=True)
+    with open(hadoop_aws_jar_path, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:
                 f.write(chunk)
