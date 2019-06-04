@@ -72,6 +72,12 @@ to_cp_dir_list = list(
 for to_cp_dir in to_cp_dir_list:
     shutil.copytree(to_cp_dir, py_module_dir + '/' + to_cp_dir)
 
+print('copying additional jars to spark package...')
+add_jar_paths = [aws_java_sdk_jar_path, hadoop_aws_jar_path]
+jar_dir = spark_tmpl_dir + '/' + 'jars/'
+for j in add_jar_paths:
+    shutil.copy(j, jar_dir)
+
 print('writing spark-env.sh...')
 shutil.copy(spark_tmpl_dir + '/conf/spark-env.sh.template', spark_tmpl_dir + '/conf/spark-env.sh')
 with open(spark_tmpl_dir + '/conf/spark-env.sh', 'a') as f:

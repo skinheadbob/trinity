@@ -84,12 +84,13 @@ Make the following changes on interpreter `spark`,
     spark.executor.memory        48g
     spark.sql.shuffle.partitions 2160
     
-    hive_metastore_uris = thrift://[hive_ip]:9083
-    spark_driver_extraJavaOptions = -Dcom.amazonaws.services.s3.enableV4=true -Dcom.amazonaws.services.s3.enforceV4=true
-    spark_executor_extraJavaOptions = -Dcom.amazonaws.services.s3.enableV4=true -Dcom.amazonaws.services.s3.enforceV4=true
-    spark_hadoop_fs_s3_impl = org.apache.hadoop.fs.s3a.S3AFileSystem
-    spark_hadoop_fs_s3a_endpoint = [S3 endpoint, e.g. s3.ap-northeast.amazonaws.com]
-    spark_sql_catalogImplementation = hive
+    spark.driver.extraJavaOptions    -Dcom.amazonaws.services.s3.enableV4=true -Dcom.amazonaws.services.s3.enforceV4=true
+    spark.executor.extraJavaOptions  -Dcom.amazonaws.services.s3.enableV4=true -Dcom.amazonaws.services.s3.enforceV4=true
+    spark.hadoop.fs.s3.impl          org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark.hadoop.fs.s3a.endpoint     [S3 endpoint, e.g. s3.ap-northeast.amazonaws.com]
+    
+    hive.metastore.uris              thrift://[hive_ip]:9083
+    spark.sql.catalogImplementation  hive
     
 To give Zeppelin a test drive, create a new note and try running the following code,
 
