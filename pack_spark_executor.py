@@ -60,7 +60,26 @@ print('unpacking template spark package...')
 spark_tmpl_dir = spark_tmpl_path[:-4]
 shutil.rmtree(spark_tmpl_dir, ignore_errors=True)
 with tarfile.open(spark_tmpl_path, 'r') as t:
-    t.extractall(path=base_dir)
+    def is_within_directory(directory, target):
+        
+        abs_directory = os.path.abspath(directory)
+        abs_target = os.path.abspath(target)
+    
+        prefix = os.path.commonprefix([abs_directory, abs_target])
+        
+        return prefix == abs_directory
+    
+    def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+    
+        for member in tar.getmembers():
+            member_path = os.path.join(path, member.name)
+            if not is_within_directory(path, member_path):
+                raise Exception("Attempted Path Traversal in Tar File")
+    
+        tar.extractall(path, members, numeric_owner=numeric_owner) 
+        
+    
+    safe_extract(t, path=base_dir)
 
 print('copying my python modules to spark package...')
 py_module_dir = spark_tmpl_dir + '/' + 'py_modules'
